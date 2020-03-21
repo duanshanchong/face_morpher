@@ -30,7 +30,6 @@ try:
 	BOTTOM_IMAGE = sys.argv[1]
 	MASK_IMAGE = sys.argv[2]
 	alpha = sys.argv[3]
-
 except:
 	BOTTOM_IMAGE = 'img0.png'
 	MASK_IMAGE = 'img1.png'
@@ -389,8 +388,9 @@ bottom_img = imread(BOTTOM_IMAGE)
 mask_img = imread(MASK_IMAGE)
 
 # 获得68个人脸关键点的坐标
+# print(bottom_img)
 landmarks_bottom = get_landmarks(bottom_img)
-landmarks_mask= get_landmarks(mask_img)
+landmarks_mask = get_landmarks(mask_img)
 
 # 获取的对齐关系
 M = transformation_from_points(landmarks_bottom, landmarks_mask)
@@ -421,6 +421,8 @@ cv2.imwrite(outfile_path, tran_morph_img)
 # 修正融合图颜色与底图一致
 morph_image_revise = correct_color(bottom_img, morph_img, landmarks_bottom)
 outfile_path = os.path.join(RESULT_PATH, '4-morph_img_revise_{}_{}_{}.jpg'.format(BOTTOM_IMAGE.split('.')[0], MASK_IMAGE.split('.')[0], alpha))
+if not os.path.exists(RESULT_PATH):
+	os.makedirs(RESULT_PATH)
 cv2.imwrite(outfile_path, morph_image_revise)
 
 # morph_image_revise不是标准的RGB文件保存后重载
